@@ -108,7 +108,7 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
         while (!temp->children.empty()) {
           subtree_size *= temp->children.size();
           temp = temp->children[0].get();
-        } 
+        }
         if (num >= static_cast<int>(subtree_size)) {
           num -= subtree_size;
           child_index = node->children.size();
@@ -117,6 +117,6 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
         }
       }
     }
-  } 
+  }
   return {};
 }
