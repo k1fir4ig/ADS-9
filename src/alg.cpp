@@ -23,8 +23,7 @@ PMTree::PMTree(const std::vector<char>& elements) {
     }
     buildTree(root, elements);
 }
-void PMTree::buildTree(const std::shared_ptr<Node>& parent, const std::vector<char>& remaining)
-{
+void PMTree::buildTree(const std::shared_ptr<Node>& parent, const std::vector<char>& remaining) {
     if (remaining.empty()) return;
     for (char elem : remaining) {
         auto child = std::make_shared<Node>(elem);
@@ -80,43 +79,26 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
         return {};
     }
     std::vector<char> result;
-    auto current = tree.getRoot();
-    if (!current) return {};
+    auto node = tree.getRoot();
+    if (!node) return {};
     num--;
-    std::stack<std::pair<std::shared_ptr<PMTree::Node>, int>> stack;
-    stack.push({current, -1});
-    while (!stack.empty()) {
-        auto& [node, child_index] = stack.top();
-        if (child_index >= 0 && child_index < static_cast<int>(node->children.size()))
-        {
-            result.pop_back();
+    while (true) {
+        if (node->children.empty()) {
+            return result;
         }
-        child_index++;
-        if (child_index >= static_cast<int>(node->children.size())) {
-            stack.pop();
-            continue;
+        size_t subtree_size = 1;
+        for (size_t i = 2; i <= node->children.size(); ++i) {
+            subtree_size *= i;
+        }
+        size_t child_index = num / subtree_size;
+        if (child_index >= node->children.size()) {
+            return {};
         }
         auto child = node->children[child_index];
         result.push_back(child->value);
-        if (child->children.empty()) {
-            if (num == 0) {
-                return result;
-            }
-            num--;
-        } else {
-            size_t subtree_size = 1;
-            auto temp = child;
-            while (!temp->children.empty()) {
-                subtree_size *= temp->children.size();
-                temp = temp->children[0];
-            }
-            if (num >= static_cast<int>(subtree_size)) {
-                num -= subtree_size;
-                result.pop_back();
-            } else {
-                stack.push({child, -1});
-            }
-        }
+        num %= subtree_size;
+        node = child;
     }
+}
     return {};
 }
