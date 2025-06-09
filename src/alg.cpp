@@ -82,24 +82,20 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
     auto node = tree.getRoot();
     if (!node) return {};
     num--;
-    while (true) {
-        if (node->children.empty()) {
-            return result;
-        }
-        size_t subtree_size = 1;
-        for (size_t i = 2; i <= node->children.size(); ++i) {
-            subtree_size *= i;
-        }
-        size_t child_index = num / subtree_size;
-        if (child_index >= node->children.size()) {
-            return {};
-        }
-        auto child = node->children[child_index];
-        result.push_back(child->value);
-        num %= subtree_size;
-        node = child;
-        }
+    std::vector<std::shared_ptr<PMTree::Node>> current_children = node->children;
+    std::vector<char> elements;
+    for (const auto& child : current_children) {
+        elements.push_back(child->value);
     }
-}
-    return {};
+    while (!elements.empty()) {
+        size_t factorial = 1;
+        for (size_t i = 1; i < elements.size(); ++i) {
+            factorial *= i;
+        }
+        size_t index = num / factorial;
+        result.push_back(elements[index]);
+        num %= factorial;
+        elements.erase(elements.begin() + index);
+    }
+    return result;
 }
