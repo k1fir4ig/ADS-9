@@ -23,7 +23,7 @@ class PMTree {
  private:
   std::unique_ptr<Node> root;
   size_t total_permutations;
-
+    
   void buildTree(Node* parent, const std::vector<char>& remaining);
 };
 
