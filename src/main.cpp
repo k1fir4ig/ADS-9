@@ -1,7 +1,7 @@
 // Copyright 2022 NNTU-CS
-#include "tree.h"
 #include <iostream>
 #include <vector>
+#include "tree.h"
 
 void printVector(const std::vector<char>& vec) {
   for (char c : vec) {
