@@ -23,7 +23,8 @@ PMTree::PMTree(const std::vector<char>& elements) {
     }
     buildTree(root, elements);
 }
-void PMTree::buildTree(const std::shared_ptr<Node>& parent, const std::vector<char>& remaining) {
+void PMTree::buildTree(const std::shared_ptr<Node>& parent,
+                      const std::vector<char>& remaining) {
     if (remaining.empty()) return;
     for (char elem : remaining) {
         auto child = std::make_shared<Node>(elem);
@@ -82,7 +83,7 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
     auto node = tree.getRoot();
     if (!node) return {};
     num--;
-    std::vector<std::shared_ptr<PMTree::Node>> current_children = node->children;
+    auto current_children = node->children;
     std::vector<char> elements;
     for (const auto& child : current_children) {
         elements.push_back(child->value);
