@@ -98,6 +98,7 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
         result.push_back(child->value);
         num %= subtree_size;
         node = child;
+        }
     }
 }
     return {};
