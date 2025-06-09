@@ -85,36 +85,36 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
   stack.push({current, -1});
   while (!stack.empty()) {
     auto& [node, child_index] = stack.top();
+    if (child_index >= 0) {
+      result.pop_back();
+    }
+    child_index++;
+    if (child_index >= static_cast<int>(node->children.size())) {
+      stack.pop();
+      continue;
+    }
     if (node->value != '\0') {
       result.push_back(node->value);
     }
-    if (node->children.empty()) {
+    if (node->children[child_index]->children.empty()) {
       if (num == 0) {
+        result.push_back(node->children[child_index]->value);
         return result;
       }
       num--;
       result.pop_back();
-      stack.pop();
     } else {
-      child_index++;
-      if (child_index >= static_cast<int>(node->children.size())) {
-        if (node->value != '\0') {
-          result.pop_back();
-        }
-        stack.pop();
+      size_t subtree_size = 1;
+      const PMTree::Node* temp = node->children[child_index].get();
+      while (!temp->children.empty()) {
+        subtree_size *= temp->children.size();
+        temp = temp->children[0].get();
+      }
+      if (num >= static_cast<int>(subtree_size)) {
+        num -= subtree_size;
+        result.pop_back();
       } else {
-        size_t subtree_size = 1;
-        const PMTree::Node* temp = node->children[child_index].get();
-        while (!temp->children.empty()) {
-          subtree_size *= temp->children.size();
-          temp = temp->children[0].get();
-        }
-        if (num >= static_cast<int>(subtree_size)) {
-          num -= subtree_size;
-          child_index = node->children.size();
-        } else {
-          stack.push({node->children[child_index].get(), -1});
-        }
+        stack.push({node->children[child_index].get(), -1});
       }
     }
   }
