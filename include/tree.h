@@ -2,29 +2,29 @@
 #ifndef INCLUDE_TREE_H_
 #define INCLUDE_TREE_H_
 
-include <vector>
+#include <vector>
 #include <memory>
 
 class PMTree {
-public:
-    struct Node {
-        char value;
-        std::vector<std::unique_ptr<Node>> children;
-        
-        Node(char val) : value(val) {}
-    };
+ public:
+  struct Node {
+    char value;
+    std::vector<std::unique_ptr<Node>> children;
+    
+    explicit Node(char val) : value(val) {}
+  };
 
-    PMTree(const std::vector<char>& elements);
-    ~PMTree() = default;
+  explicit PMTree(const std::vector<char>& elements);
+  ~PMTree() = default;
 
-    const Node* getRoot() const { return root.get(); }
-    size_t getPermutationsCount() const { return total_permutations; }
+  const Node* getRoot() const { return root.get(); }
+  size_t getPermutationsCount() const { return total_permutations; }
 
-private:
-    std::unique_ptr<Node> root;
-    size_t total_permutations;
+ private:
+  std::unique_ptr<Node> root;
+  size_t total_permutations;
 
-    void buildTree(Node* parent, const std::vector<char>& remaining);
+  void buildTree(Node* parent, const std::vector<char>& remaining);
 };
 
 std::vector<std::vector<char>> getAllPerms(const PMTree& tree);
